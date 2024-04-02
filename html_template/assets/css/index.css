@@ -166,86 +166,20 @@ body {
     border: none;
 }
 
-.food-menus {
+.food-menus, .pagination-section {
     margin: 1em 3em 0;
     width: calc(100% - 6em);
 }
 
 .food-list {
     width: 100%;
-    display: flex;
+    /* display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-start;
-    /* gap: 1em; */
+    gap: 1em; */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1em;
 }
 
-.food-item {
-    flex: 0 0 20%;
-    box-sizing: border-box;
-    /* padding: 10px; */
-}
-
-@media screen and (max-width: 1200px) {
-    .food-item {
-      flex: 0 0 25%; /* Hiển thị 4 item trên mỗi hàng khi màn hình medium */
-    }
-}
-  
-@media screen and (max-width: 992px) {
-    .food-item {
-        flex: 0 0 33.3333%; /* Hiển thị 3 item trên mỗi hàng khi màn hình nhỏ hơn medium */
-    }
-}
-
-@media screen and (max-width: 576px) {
-    .food-item {
-        flex: 0 0 50%; /* Hiển thị 2 item trên mỗi hàng khi màn hình nhỏ */
-    }
-}
-
-@media screen and (max-width: 400px) {
-    .food-item {
-        flex: 0 0 100%; /* Hiển thị 1 item trên mỗi hàng khi màn hình nhỏ nhất */
-    }
-}
-
-
-
-/* @media screen and (max-width: 576px) {
-    .food-card {
-        width: 100%;
-        margin: 24px;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .food-card {
-        width: 50%;
-        margin: 0 ;
-    }
-}
-
-
-@media screen and (max-width: 992px) {
-    .food-card {
-        width: 33.333%;
-    }
-}
-
-@media screen and (max-width: 1200px) {
-    .food-card {
-        width: 25%;
-    }
-}
-
-/* XXL Screen */
-@media screen and (max-width: 1400px) {
-    .food-card {
-        width: 20%;
-    }
-}
-
-.food-card {
-    width: 20%;
-} */
