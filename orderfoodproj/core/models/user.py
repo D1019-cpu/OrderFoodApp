@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save 
 from django.dispatch import receiver 
 
+from .restaurant import Restaurant
 from .city import City
 
 
@@ -17,15 +18,19 @@ class CustomUser(AbstractUser):
 
 
 class Customer(models.Model):
+    '''Khách hàng'''
+    
     id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='id')
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    address = models.TextField()
-    phone_number = models.CharField(max_length=20)
-    city = models.ForeignKey(City, on_delete=models.CASCADE, null=True, blank=True)
+    
+    address = models.TextField(null=True, blank=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
+    avatar = models.ImageField(upload_to='uploads/user_avatar/', null=True, blank=True)
+    city = models.ForeignKey(City, on_delete=models.DO_NOTHING, null=True, blank=True) # nếu có địa chỉ lọc theo thành phố
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True)
     
-
 
 class Provider(models.Model):
     id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='id')
@@ -33,7 +38,7 @@ class Provider(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True)
 
-    # restaurant_id = None # liên kết đến bảng nhà hàng
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.DO_NOTHING, null=True, blank=True)
 
 
 class Staff(models.Model):
@@ -43,7 +48,7 @@ class Staff(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True)
 
-    # liên kết đến bảng nhà hàng 
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.DO_NOTHING, null=True, blank=True)
 
 
 @receiver(post_save, sender=CustomUser)

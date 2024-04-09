@@ -1,4 +1,5 @@
 from django.db import models 
+from django.db.models import Q
 from .city import City
 
 
@@ -7,10 +8,18 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=255) 
     address = models.TextField()
     phone_number = models.CharField(max_length=20)
-    city = models.ForeignKey(City, on_delete=models.DO_NOTHING, null=True, blank=True)
-    # type_of_food # loại đồ ăn kinh doanh chủ yếu: hải sản, đồ nướng, bún, phở, ...
-    image = models.ImageField(upload_to='uploads/brand/')
+    banner = models.ImageField(upload_to='banners/')
     created_at = models.DateTimeField(auto_now_add=True) 
+
+    city = models.ForeignKey(City, on_delete=models.DO_NOTHING, null=True, blank=True)
+
+    @staticmethod
+    def get_all_restaurants():
+        return Restaurant.objects.all()
+
+    @staticmethod
+    def get_restaurant_by_city(city_name):
+        return Restaurant.objects.filter(Q(city__name__icontains=city_name) | Q(city__name__unaccent__icontains=city_name))
 
     class Meta:
         verbose_name = 'Restaurant'
