@@ -142,14 +142,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 JAZZMIN_SETTINGS = {
-    'site_title': 'Order Food Admin',
-    'site_header': "",
-    'site_brand': "",
-    'site_logo': "",
-    'login_logo': "",
-    'login_logo_dark': "",
-    'site_logo_classes': "",
-    'site_icon': "",
+    'site_title': 'Order Food',
+    'site_header': "Order Food",
+    'site_brand': "HK2 Food Admin",
+    'site_logo': "/logo.png",
+    'login_logo': "/logo.png",
+    'login_logo_dark': "/logo.png",
+    'site_logo_classes': "img-circle img-thumbnail",
+    'site_icon': "/favicon.ico",
     'welcome_sign': "Welcome to Admin Page",
     'copyright': 'hacker2',
 }
