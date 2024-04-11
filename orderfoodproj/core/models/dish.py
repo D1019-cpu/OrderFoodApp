@@ -1,5 +1,6 @@
 from django.db import models 
 from .restaurant import Restaurant 
+from .menu import Menu 
 
 
 STATUS = (
@@ -19,6 +20,7 @@ class Dish(models.Model):
     price = models.IntegerField(default=0)
     old_price = models.IntegerField(default=0)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True, blank=True)
+    menu = models.ForeignKey(Menu, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     product_status = models.CharField(choices=STATUS, max_length=10, default='published')
     type = models.CharField(max_length=255, null=True, blank=True)

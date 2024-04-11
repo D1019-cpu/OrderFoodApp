@@ -29,7 +29,8 @@ multiStepForm.addEventListener('click', (e) => {
     if (incrementor == null) return;
 
     const inputs = [...formSteps[currentStep].querySelectorAll("input")];
-    const allValid = inputs.every(input => input.checkValidity());  // output trả về true hoặc false
+
+    const allValid = inputs.every(input => input.reportValidity());  // output trả về true hoặc false
     console.log(allValid);
     if (allValid) {
         currentStep += incrementor;
@@ -37,6 +38,13 @@ multiStepForm.addEventListener('click', (e) => {
     }
 
     // console.log(currentStep);
+});
+
+formSteps.forEach(step => {
+    step.addEventListener("animationend", e => {
+        formSteps[currentStep].classList.remove("hide");
+        e.target.classList.toggle("hide", !e.target.classList.contains("active"));
+    });
 });
 
 function showCurrentStep() {
