@@ -102,7 +102,7 @@ body {
     object-position: center;
 }
 
-.food-highlight-card .food-highlight-desc h4 { color: var(--primary-color); }
+.food-highlight-card .food-highlight-desc h4 { color: var(--primary-color); font-size: 20px; }
 
 .food-highlight-card .food-highlight-desc p {
     color: var(--black-color);

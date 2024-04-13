@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% block title %} Trang chủ {% endblock title %}
 
 {% block style %}
+
 <link rel="stylesheet" href="{% static 'assets/css/index.css' %}">
+
 {% endblock style %}
 
 {% block content %}
@@ -17,10 +20,10 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse d-sm-none" style="padding-left: 48px;" id="navbarSupportedContent">
-              <div class="search">
-                <input type="text" placeholder="Bạn muốn ăn gì?">
+              <form class="search">
+                <input type="text" placeholder="Bạn muốn ăn gì?" name="q" value="{{query}}">
                 <button class="search-btn">Tìm kiếm</button>
-              </div>
+              </form>
           </div>
 
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -62,37 +65,15 @@
         </div>
 
         <div class="food-highlight-wrapper w-100 d-flex" style="padding: 1%;gap: 1.5em;overflow-x: hidden;">
+            {% for product in feature_list %}
             <div class="food-highlight-card d-flex flex-row align-items-center">
-                <img src="{% static 'assets/images/bugger.jpg' %}" alt="bugger">
+                <img src="{{product.image.url}}" alt="{{product.name}}">
                 <div class="food-highlight-desc">
-                    <h4>Big Beef Bugger</h4>
-                    <p>50,000 đ</p>
+                    <h4>{{product.name}}</h4>
+                    <p>{{product.price|intcomma}} đ</p>
                 </div>
             </div>
-
-            <div class="food-highlight-card d-flex flex-row align-items-center">
-                <img src="{% static 'assets/images/salad.jpg' %}" alt="bugger">
-                <div class="food-highlight-desc">
-                    <h4>Fresh Salad</h4>
-                    <p>50,000 đ</p>
-                </div>
-            </div>
-
-            <div class="food-highlight-card d-flex flex-row align-items-center">
-                <img src="{% static 'assets/images/coffee.jpg' %}" alt="bugger">
-                <div class="food-highlight-desc">
-                    <h4>Cafe Latte</h4>
-                    <p>50,000 đ</p>
-                </div>
-            </div>
-
-            <div class="food-highlight-card d-flex flex-row align-items-center">
-                <img src="{% static 'assets/images/steak.jpg' %}" alt="bugger">
-                <div class="food-highlight-desc">
-                    <h4>Premium Steak</h4>
-                    <p>50,000 đ</p>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
@@ -160,81 +141,43 @@
 
     <div class="food-menus">
         <div class="food-list">
+            {% for dish in items %}
             <div class="card food-card food-item">
-                <img src="{% static 'assets/images/bugger.jpg' %}" class="card-img-top" alt="...">
+                <img src="{{dish.image.url}}" class="card-img-top" style="width: 100%;height: 10rem;object-fit: cover;object-position: center;" alt="{{dish.name}}">
                 <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                  <h5 class="card-title">{{dish.name|truncatechars:20}}</h5>
+                  <p class="card-text d-flex align-items-center justify-content-between">
+                    <span>⭐ 4.2</span>
+                    <span>🕔 20 phút</span>
+                    <span>{{dish.distance}} km</span>
+                  </p>
+                  <p class="card-text">Giá: {{dish.price|intcomma}} đ</p>
+                  <a href="#" class="btn btn-success" style="border-radius: 50%;">+</a>
                 </div>
             </div>
-
-            <div class="card food-card food-item">
-                <img src="{% static 'assets/images/coffee.jpg' %}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-
-            <div class="card food-card food-item">
-                <img src="{% static 'assets/images/pizza.jpg' %}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-
-            <div class="card food-card food-item">
-                <img src="{% static 'assets/images/salad.jpg' %}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-
-            <div class="card food-card food-item">
-                <img src="{% static 'assets/images/seafood.jpg' %}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-
-            <div class="card food-card food-item">
-                <img src="{% static 'assets/images/wine.jpg' %}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-
-            <div class="card food-card food-item">
-                <img src="{% static 'assets/images/steak.jpg' %}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-
-            <div class="card food-card food-item">
-                <img src="{% static 'assets/images/noodle.jpg' %}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
-    <div class="pagination-section d-flex justify-content-center">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center pt-2 pb-2" style="margin-bottom: 0;">
+            {% if items.has_previous %}
+                <li class="page-item"><a class="page-link" href="?q={{}}&page=1">&laquo; First</a></li>
+                <li class="page-item"><a class="page-link" href="?q={{}}&page={{ items.previous_page_number }}">Previous</a></li>
+            {% endif %}
+
+            {% for num in page_range %}
+                <li class="page-item {% if num == items.number %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endfor %}
+    
+            {% if items.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ items.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ items.paginator.num_pages }}">Last &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- <div class="pagination-section d-flex justify-content-center">
         <nav aria-label="Page navigation example">
             <ul class="pagination">
               <li class="page-item"><a class="page-link" href="#">Previous</a></li>
@@ -244,7 +187,7 @@
               <li class="page-item"><a class="page-link" href="#">Next</a></li>
             </ul>
         </nav>
-    </div>
+    </div> -->
 
 </div>
 <div class="w-100" style="background-color: #BED7DC;padding: 3em 4.5em 0.8em;">
@@ -261,17 +204,25 @@
             </div>
         </div>
         <div class="col col-sm-6 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
-            <p class="fw-semibold">Mạng xã hội</p>
+            <p class="fw-semibold">Chi nhánh</p>
             
-            <a href="#" class="nav-link text-primary fs-5"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#" class="nav-link text-primary fs-5"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#" class="nav-link text-primary fs-5"><i class="fa-brands fa-square-instagram"></i></a>
+            <a href="#" class="nav-link text-primary fs-6">Hà Nội</a>
+            <a href="#" class="nav-link text-primary fs-6">TP. Hồ Chí Minh</a>
+            <a href="#" class="nav-link text-primary fs-6">Cần Thơ</a>
+            <a href="#" class="nav-link text-primary fs-6">Đà Nẵng</a>
             
         </div>
         <div class="col col-sm-6 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
-            <p class="fw-semibold">Ứng dụng</p>
-            <button type="button" class="btn btn-dark text-white mb-1 d-flex align-items-center justify-content-center" style="width: 40px;height: 40px;"><i class="fa-brands fa-apple"></i></button><br>
-            <button type="button" class="btn btn-dark text-white d-flex align-items-center justify-content-center" style="width: 40px;height: 40px;"><i class="fa-brands fa-android"></i></button><br>
+            <p class="fw-semibold">Thực đơn</p>
+            <a href="#" class="nav-link fs-6">Đồ ăn nhanh</a>
+            <a href="#" class="nav-link fs-6">Đồ uống</a>
+            <a href="#" class="nav-link fs-6">Kem</a>
+            <a href="#" class="nav-link fs-6">Cà phê</a>
+            <a href="#" class="nav-link fs-6">Hải sản</a>
+            <a href="#" class="nav-link fs-6">Đồ chay</a>
+
+            <!-- <button type="button" class="btn btn-dark text-white mb-1 d-flex align-items-center justify-content-center" style="width: 40px;height: 40px;"><i class="fa-brands fa-apple"></i></button><br>
+            <button type="button" class="btn btn-dark text-white d-flex align-items-center justify-content-center" style="width: 40px;height: 40px;"><i class="fa-brands fa-android"></i></button><br> -->
         </div>
         <div class="col col-sm-6 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
             <p class="fw-semibold">Thông tin liên hệ</p>
