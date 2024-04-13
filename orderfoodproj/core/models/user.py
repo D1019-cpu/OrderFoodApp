@@ -25,7 +25,7 @@ class Customer(models.Model):
     
     address = models.TextField(null=True, blank=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
-    avatar = models.ImageField(upload_to='uploads/user_avatar/', null=True, blank=True)
+    avatar = models.ImageField(upload_to='uploads/user_avatar/', default='default/user.png')
     city = models.ForeignKey(City, on_delete=models.DO_NOTHING, null=True, blank=True) # nếu có địa chỉ lọc theo thành phố
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -34,17 +34,38 @@ class Customer(models.Model):
 
 class Provider(models.Model):
     id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='id')
-    admin = models.OneToOneField(Customer, on_delete=models.CASCADE)
+    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True)
 
     restaurant = models.ForeignKey(Restaurant, on_delete=models.DO_NOTHING, null=True, blank=True)
 
+    # username 
+    # email 
+    # password
+
+    fullname = models.CharField(max_length=255, null=True, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
+    phone = models.CharField(max_length=20, null=True, blank=True)
+    # số chứng nhận kinh doanh (chuỗi số và text)
+    business_number = models.CharField(max_length=20, null=True, blank=True)
+
+    # giấy phép kinh doanh (ảnh) 
+    business_license = models.ImageField(upload_to='business_license/', null=True, blank=True)
+
+    # chứng nhận vệ sinh an toàn thực phẩm (ảnh) 
+    food_safty_cert = models.ImageField(upload_to='safty_cert/', null=True, blank=True)
+    
+    # số cccd 
+    ID_card = models.CharField(max_length=12, null=True, blank=True)
+
+
 
 class Staff(models.Model):
     '''Tài khoản nhân viên của nhà hàng'''
     id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='id')
-    admin = models.OneToOneField(Customer, on_delete=models.CASCADE)
+    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True)
 

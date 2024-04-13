@@ -1,130 +1,178 @@
-@import url(https://fonts.googleapis.com/css?family=Montserrat);
+:root {
+  /* --primary-color: rgb(11, 78, 179); */
+  --primary-color: #ff9a76;
+}
 
-* {
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+*,
+*::after,
+*::before {
   margin: 0;
   padding: 0;
-}
-html {
-  height: 100%;
-  background: #ffeadb;
+  box-sizing: border-box;
 }
 
 body {
-  font-family: montserrat, arial, verdana;
+  font-family: "Montserrat", sans-serif;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  /* background: linear-gradient(to right, #74ebd5, #acb6e5); */
+  background: #ffeadb;
 }
 
-#multistepsform {
-  width: 400px;
-  margin: 50px auto;
+/* General settings */
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: .25rem;
+}
+
+.text-center {
   text-align: center;
+  color: #2c3e50;
+}
+
+.width-50 {
+  width: 50%;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+/* progress */
+.progressbar {
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin: 2rem 0 4rem 0;
+  counter-reset: step;
+}
 
-  fieldset {
-    background: white;
-    border: 0 none;
-    border-radius: 3px;
-    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
-    padding: 20px 30px;
-    box-sizing: border-box;
-    width: 80%;
-    margin: 0 10%;
-    position: relative;
-  }
-  fieldset:not(:first-of-type) {
-    display: none;
-  }
-  input,
-  textarea {
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    margin-bottom: 10px;
-    width: 100%;
-    box-sizing: border-box;
-    font-family: montserrat;
-    color: #2c3e50;
-    font-size: 13px;
-    &:focus {
-      border-color: #679b9b;
-      outline: none;
-      color: #637373;
-    }
-  }
+.progressbar::before, .progress {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4px;
+  width: 100%;
+  background-color: #dcdcdc;
+}
 
-  .action-button {
-    width: 100px;
-    background: #ff9a76;
-    font-weight: bold;
-    color: #fff;
-    transition: 150ms;
-    border: 0 none;
-    border-radius: 1px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 10px 5px;
+.progress {
+  background-color: var(--primary-color);
+  width: 0%;
+  transition: 0.3s ease-in-out;
+}
+
+.progress-step {
+  width: 35px;
+  height: 35px;
+  background-color: #dcdcdc;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.progress-step::before {
+  counter-increment: step;
+  content: counter(step);
+}
+
+.progress-step::after {
+  content: attr(data-title);
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  font-size: 0.80rem;
+  color: #666;
+}
+
+.progress-step.active {
+  background-color: var(--primary-color);
+  color: #f3f3f3;
+}
+
+/* form */
+.form {
+  width: clamp(320px, 30%, 430px);
+  /* margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: .35rem;
+  padding: 1.5rem;
+  background-color: #ecf0f1;
+  box-shadow: 2px 4px 11px -1px #000000; */
+
+  background: white;
+  border: 0 none;
+  border-radius: 3px;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+  padding: 20px 30px;
+  box-sizing: border-box;
+  /* width: 80%; */
+  margin: 0 10%;
+  position: relative;
+}
+
+.form-step {
+  display: none;
+  transform-origin: top;
+  animation: animate 0.5s;
+}
+
+@keyframes animate {
+  from {
+      transform: scale(1, 0);
+      opacity: 0;
   }
-  .action-button:hover,
-  .action-button:focus {
-    box-shadow: 0 0 0 2px #f08a5d, 0 0 0 3px #ff976;
-    color: #fff;
-  }
-  .fs-title {
-    font-size: 15px;
-    text-transform: uppercase;
-    color: #2c3e50;
-    margin-bottom: 10px;
-  }
-  .fs-subtitle {
-    font-weight: normal;
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 20px;
-  }
-  #progressbar {
-    margin-bottom: 30px;
-    overflow: hidden;
-    counter-reset: step;
-    li {
-      list-style-type: none;
-      color: #679b9b;
-      text-transform: uppercase;
-      font-size: 9px;
-      width: 33.33%;
-      float: left;
-      position: relative;
-      &:before {
-        content: counter(step);
-        counter-increment: step;
-        width: 20px;
-        line-height: 20px;
-        display: block;
-        font-size: 10px;
-        color: #fff;
-        background: #679b9b;
-        border-radius: 3px;
-        margin: 0 auto 5px auto;
-      }
-      &:after {
-        content: "";
-        width: 100%;
-        height: 2px;
-        background: #679b9b;
-        position: absolute;
-        left: -50%;
-        top: 9px;
-        z-index: -1;
-      }
-      &:first-child:after {
-        content: none;
-      }
-    }
-    li.active {
-      color: #ff9a76;
-      &:before,
-      &:after {
-        background: #ff9a76;
-        color: white;
-      }
-    }
+  to {
+      transform: scale(1, 1);
+      opacity: 1;
   }
 }
+
+.form-step.active {
+  display: block;
+}
+
+.input-group {
+  margin: 2rem 0;
+}
+
+/* Buttons */
+.btns-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.btn {
+  padding: 0.75rem;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  background-color: var(--primary-color);
+  color: #f3f3f3;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 250ms ease-in-out;
+}
+
+.btn:active {
+  transform: scale(.98);
+}
+
+.btn:hover {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--primary-color);
+}
+

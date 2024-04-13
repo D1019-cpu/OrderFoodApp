@@ -8,10 +8,13 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=255) 
     address = models.TextField()
     phone_number = models.CharField(max_length=20)
-    banner = models.ImageField(upload_to='banners/')
+    logo = models.ImageField(upload_to='rest-logo/', default='default/logo.png')
+    banner = models.ImageField(upload_to='banners/', default='default/banner.png')
     created_at = models.DateTimeField(auto_now_add=True) 
 
-    city = models.ForeignKey(City, on_delete=models.DO_NOTHING, null=True, blank=True)
+    city = models.ForeignKey(City, on_delete=models.DO_NOTHING, default=1)
+
+    is_active = models.BooleanField(default=False) # trạng thái nhà hàng được duyệt hay chưa?
 
     @staticmethod
     def get_all_restaurants():
