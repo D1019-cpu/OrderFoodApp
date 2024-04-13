@@ -80,6 +80,18 @@ body {
     color: var(--white-color);
 }
 
+.cart-counter {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: #fff;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .back, .next { cursor: pointer; }
 
 .food-highlight-card {

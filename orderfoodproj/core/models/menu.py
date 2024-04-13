@@ -4,6 +4,9 @@ from django.db import models
 class Menu(models.Model):
     id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='id')
     name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='menu/', null=True, blank=True)
+    slug = models.SlugField(default="")
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

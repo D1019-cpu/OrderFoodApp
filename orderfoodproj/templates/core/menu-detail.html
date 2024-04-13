@@ -20,8 +20,8 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse d-sm-none" style="padding-left: 48px;" id="navbarSupportedContent">
-              <form class="search">
-                <input type="text" placeholder="Bạn muốn ăn gì?" name="q" value="{% if query != 'None' %}{{query}}{% else %}''{% endif %}">
+              <form class="search" action="{% url 'index' %}">
+                <input type="text" placeholder="Bạn muốn ăn gì?" name="q" value="{% if query != 'None' %}{{query}}{% endif %}">
                 <button class="search-btn">Tìm kiếm</button>
               </form>
           </div>
@@ -29,7 +29,7 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <span class="cart-counter">4</span>
-              <a id="cart" class="nav-link cart" href="#"><ion-icon name="cart-outline"></ion-icon></a>
+              <a class="nav-link cart" href="#"><ion-icon name="cart-outline"></ion-icon></a>
             </li>
             
             {% if request.user.is_authenticated %}
@@ -56,26 +56,10 @@
         </div>
     </nav>
 
-    <div class="food-highlight" style="padding: 1% 2%;margin: 2% 3em;background-color: #ffc107;border-radius: 8px;box-sizing: border-box;">
-        <div class="d-flex align-items-center justify-content-between">
-            <h3 class="fs-3 fw-semibold">Món ăn đề xuất</h3>
-            <!-- <div class="fs-4">
-                <ion-icon class="back" name="chevron-back-circle-outline"></ion-icon>
-                <ion-icon class="next" name="chevron-forward-circle-outline"></ion-icon>
-            </div> -->
-        </div>
-
-        <div class="food-highlight-wrapper w-100 d-flex" style="padding: 1%;gap: 1.5em;overflow-x: hidden;">
-            {% for product in feature_list %}
-            <div class="food-highlight-card d-flex flex-row align-items-center">
-                <img src="{{product.image.url}}" alt="{{product.name}}">
-                <div class="food-highlight-desc">
-                    <h4>{{product.name|truncatechars:20}}</h4>
-                    <p>{{product.price|intcomma}} đ</p>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+    <div style="margin: 1rem 3em 0;gap: 0 1.5rem;" class="d-flex align-items-center justify-content-start">
+        <a href="{% url 'index' %}" class="nav-link fs-4">Trang chủ</a>
+        <i class="fa-solid fa-chevron-right fs-6"></i>
+        <a href="#" class="nav-link fs-4">{{menu.name}}</a>
     </div>
 
     <div class="food-category">
@@ -101,21 +85,8 @@
                 </div>
             </a>
             {% endfor %}
-
-            
         </div>
     </div>
-
-    {% if messages %}
-
-        {% for message in messages %}
-        <div {% if message.tags %} class="alert-{{ message.tags }} alert alert-dismissible mt-1 mb-1"{% endif %} role="alert">
-            <div>{{ message }}</div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-    
-    {% endif %}
     
     <hr class="divider" />
 
