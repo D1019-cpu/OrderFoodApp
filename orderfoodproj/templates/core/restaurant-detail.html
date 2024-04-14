@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
-{% block title %} {{menu.name}} {% endblock title %}
+{% block title %} {{restaurant.name}} {% endblock title %}
 
 {% block style %}
 
@@ -59,40 +59,35 @@
     <div style="margin: 1rem 3em 0;gap: 0 1.5rem;" class="d-flex align-items-center justify-content-start">
         <a href="{% url 'index' %}" class="nav-link fs-4">Trang chủ</a>
         <i class="fa-solid fa-chevron-right fs-6"></i>
-        <a href="#" class="nav-link fs-4">{{menu.name}}</a>
+        <a href="#" class="nav-link fs-4">Nhà hàng</a>
+        <i class="fa-solid fa-chevron-right fs-6"></i>
+        <a href="#" class="nav-link fs-4">{{restaurant.name}}</a>
     </div>
 
-    <div class="food-category">
-        <div class="food-category-wrapper">
-            <a href="{% url 'index' %}" style="text-decoration: none;">
-                <div class="filter-card">
-                    <div class="filter-icon">
-                        <!-- <ion-icon name="restaurant-outline"></ion-icon> -->
-                        <img src="{% static 'assets/images/utensils.png' %}" style="width: 100%;height: 100%;object-fit: cover;object-position: center;" alt="all menu">
-                    </div>
-                    <p style="margin-bottom: 0;">Tất cả</p>
-                </div>
-            </a>
-
-            {% for cat in categories %}
-            <a href="{% url 'menu-detail-view' cat.slug %}" style="text-decoration: none;">
-                <div class="filter-card">
-                    <div class="filter-icon">
-                        <!-- <ion-icon name="fast-food-outline"></ion-icon> -->
-                        <img src="{{cat.image.url}}" style="width: 100%;height: 100%;object-fit: cover;object-position: center;" alt="{{cat.name}}">
-                    </div>
-                    <p style="margin-bottom: 0;">{{cat.name}}</p>
-                </div>
-            </a>
-            {% endfor %}
+    <div style="margin: 0 3em 0;" class="d-flex align-items-center justify-content-between">
+        <div style="width: max-content;">
+            <h3 class="fs-1">{{restaurant.name}}</h3>
+            <p class="card-text d-flex align-items-center justify-content-between w-50">
+                <span>⭐ 4.2</span>
+                <span>🕔 20 phút</span>
+                <span>2.2 km</span>
+            </p>
+            <p class="card-text">
+                <b>Giờ mở cửa</b> Hôm nay 00:00 - 23:59
+            </p>
         </div>
+        <img src="{{restaurant.logo.url}}" class="img-thumbnail rounded-circle" width="200" height="200" alt="Logo {{restaurant.name}}">
     </div>
-    
-    <hr class="divider" />
 
-    <div class="food-menus">
+    <div style="margin: 1rem 3em 0;">
+        <img src="{{restaurant.banner.url}}" alt="Banner {{restaurant.name}}" style="height: 400px;width: 100%;object-fit: cover;object-position: center;border-radius: 6px;">
+    </div>
+
+    {% for menu_name, dishes in menu_dict.items %}
+    <div class="food-menus mt-5 mb-5">
+        <h3 class="fs-1 fw-bolder">{{menu_name}}</h3>
         <div class="food-list">
-            {% for dish in items %}
+            {% for dish in dishes %}
             <div class="card food-card food-item">
                 <img src="{{dish.image.url}}" class="card-img-top" style="width: 100%;height: 10rem;object-fit: cover;object-position: center;" alt="{{dish.name}}">
                 <div class="card-body">
@@ -109,6 +104,7 @@
             {% endfor %}
         </div>
     </div>
+    {% endfor %}
 
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center pt-2 pb-2" style="margin-bottom: 0;">

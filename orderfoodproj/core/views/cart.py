@@ -8,10 +8,10 @@ def add_to_cart_api(request):
     return JsonResponse()
 
 
-@login_required(login_url='/login/')
+# @login_required(login_url='/login/')
 def cart_detail_view(request):
-    pass 
     # View, cart, add not, increment or decrement quantity 
+    return render(request, 'core/cart.html', {})
 
 
 # Xử lý hủy đơn hàng

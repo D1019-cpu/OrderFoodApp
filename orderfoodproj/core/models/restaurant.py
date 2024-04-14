@@ -13,6 +13,7 @@ class Restaurant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) 
 
     city = models.ForeignKey(City, on_delete=models.DO_NOTHING, default=1)
+    slug = models.SlugField(null=True, blank=True)
 
     is_active = models.BooleanField(default=False) # trạng thái nhà hàng được duyệt hay chưa?
 
