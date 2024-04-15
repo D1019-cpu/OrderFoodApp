@@ -31,7 +31,10 @@ def post_login_view(request):
             # print(user)
             if user is not None:
                 login(request, user)
-                return redirect('index')
+                if user.user_type == '1':
+                    return redirect('index')
+                else:
+                    return redirect('restaurant-admin-view')
             else:
                 messages.info(request, "Mật khẩu không đúng, vui lòng nhập lại!")
                 return redirect('get-login-view')

@@ -16,7 +16,7 @@ def generate_user(base="user"):
     attempt = 1 
     new_username = base 
     UserModel = get_user_model()
-    while UserModel.objects.filter(username=base).exists():
+    while UserModel.objects.filter(username=new_username).exists():
         new_username = f"{base}{generate_random_suffix()}" 
     return new_username
 
@@ -36,6 +36,7 @@ def post_register_view(request):
         UserModel = get_user_model()
         if email != '' and not UserModel.objects.filter(email=email).exists():
             username = generate_user()
+            print(username)
             hash_password = make_password(password)
             user = CustomUser.objects.create(
                 username=username,
@@ -132,6 +133,7 @@ def post_register_provider_view(request):
         provider.business_license = business_license
         provider.food_safty_cert = food_safty_cert
 
+        # Thêm slug cho restaurant tự động
         # Restaurant 
         restaurant = Restaurant.objects.create(
             name=rest_name,
@@ -165,3 +167,9 @@ def post_register_provider_view(request):
 # 0234467688
 
 # KD-214522-TX-HN24
+
+
+
+# userD1019
+# rinnmusic2.2@gmail.com
+# @Admin1019

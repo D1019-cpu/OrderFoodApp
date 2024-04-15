@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load humanize %}
 
 {% block title %} Quản lý nhà hàng {% endblock title %}
 
@@ -10,7 +11,7 @@
     <div style="width: 19%;min-height: 100vh;" class="bg-dark d-flex flex-column justify-content-between">
         <div class="d-flex flex-column align-items-start">
             <div style="width: 100%;" class="d-flex align-items-center justify-content-center">
-                <img class="p-3" src="/media/default/logo.png" style="width: 150px;height: 150px;border-radius: 50%;object-fit: cover;object-position: center;" alt="logo">
+                <img class="p-3" src="{{request.user.provider.restaurant.logo.url}}" style="width: 150px;height: 150px;border-radius: 50%;object-fit: cover;object-position: center;" alt="logo">
             </div>
             <ul class="nav flex-column">
                 <li class="nav-item">
@@ -65,7 +66,7 @@
                     {{request.user.username}}
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% url 'get-profile-view' %}">Tài khoản</a></li>
+                    <li><a class="dropdown-item" href="{% url 'restaurant-profile-admin-view' restaurant.slug %}">Nhà hàng</a></li>
                     <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
                     <li><a class="dropdown-item" href="#">Ví</a></li>
                     <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>
@@ -80,22 +81,22 @@
             <div class="d-flex flex-column align-items-center justify-content-center p-3" style="width: 24%;box-shadow: 0 4px 8px 0px rgba(0, 0, 0, 0.1);">
                 <i class="fs-3 text-success fa-solid fa-cart-shopping"></i>
                 <p class="fs-5 mt-1">Số đơn đặt hàng</p>
-                <p class="fs-4">53</p>
+                <p class="fs-4">{{total_order}}</p>
             </div>
             <div class="d-flex flex-column align-items-center justify-content-center p-3" style="width: 24%;box-shadow: 0 4px 8px 0px rgba(0, 0, 0, 0.1);">
                 <i class="fs-3 text-success fa-solid fa-calendar-check"></i>
                 <p class="fs-5 mt-1">Hoàn thành</p>
-                <p class="fs-4">49</p>
+                <p class="fs-4">{{total_completed_order}}</p>
             </div>
             <div class="d-flex flex-column align-items-center justify-content-center p-3" style="width: 24%;box-shadow: 0 4px 8px 0px rgba(0, 0, 0, 0.1);">
                 <i class="fs-3 text-success fa-solid fa-strikethrough"></i>
                 <p class="fs-5 mt-1">Hủy</p>
-                <p class="fs-4">4</p>
+                <p class="fs-4">{{total_cancel_order}}</p>
             </div>
             <div class="d-flex flex-column align-items-center justify-content-center p-3" style="width: 24%;box-shadow: 0 4px 8px 0px rgba(0, 0, 0, 0.1);">
                 <i class="fs-3 text-success fa-solid fa-wallet"></i>
                 <p class="fs-5 mt-1">Doanh thu</p>
-                <p class="fs-4">6,450,000 đ</p>
+                <p class="fs-4">{{total_price|intcomma}} đ</p>
             </div>
         </div>
         <div class="w-100 mt-2 d-flex justify-content-between align-items-start" style="gap: 1%;height: 450px;">
@@ -109,131 +110,74 @@
                 <table class="table table-hover shadow" style="overflow-y: auto;">
                     <caption class="text-center caption-top fw-bolder">Đơn hàng gần đây</caption>
                     <thead>
-                        <tr>
-                            
-                                <th class="bg-primary text-white text-center fw-semi" style="border-top-left-radius: 6px;" scope="col">
-                                    STT
+                        <tr>   
+                                {% for title in titles %}
+                                <th class="bg-primary text-white text-center fw-semi" {% if forloop.first %}style="border-top-left-radius: 6px;"{% endif %} {% if forloop.last %}style="border-top-right-radius: 6px;"{% endif %} scope="col">
+                                    {{title}}
                                 </th>
-                                <th class="bg-primary text-white text-center fw-semi" scope="col">
-                                    Mã đơn hàng
-                                </th>
-                                <th class="bg-primary text-white text-center fw-semi" style="border-top-right-radius: 6px;" scope="col">
-                                    Giá
-                                </th>
-                            
+                                {% endfor %}
                         </tr>
                     </thead>
                     <tbody>
-                                <tr class="fs-6 bg-info-subtle">
-                                    <th class="bg-info-subtle text-dark text-center fw-semi" scope="row">
-                                        1
-                                    </th>
-                                    <td class="bg-info-subtle text-dark text-center">
-                                        #21233
-                                    </td>
-                                    <td class="bg-info-subtle text-dark text-center">
-                                        300,000 đ
-                                    </td>
-                                </tr>
-                            
-                                <tr class="fs-6 bg-light">
-                                    <th class="bg-light text-dark text-center fw-semi" scope="row">
-                                        2
-                                    </th>
-                                    <td class="bg-light text-dark text-center">
-                                        #234566
-                                    </td>
-                                    <td class="bg-light text-dark text-center">
-                                        400,000 đ
-                                    </td>
-                                </tr>
+                                {% with start_number=start_number %}
+                                {% for item in items %}
+                                    {% if forloop.counter|divisibleby:2 %}
+                                    <tr class="fs-6 bg-info-subtle">
+                                        <th class="bg-info-subtle text-dark text-center fw-semi" scope="row">
+                                            {{forloop.counter|add:start_number}}
+                                        </th>
+                                        <td class="bg-info-subtle text-dark text-center">
+                                            {{item.created_at.day}}-{{item.created_at.month}}-{{item.created_at.year}}
+                                        </td>
+                                        <td class="bg-info-subtle text-dark text-center">
+                                            {{item.status}}
+                                        </td>
+                                        <td class="bg-info-subtle text-dark text-center">
+                                            {{item.price|intcomma}} đ
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                    <tr class="fs-6 bg-light">
+                                        <th class="bg-light text-dark text-center fw-semi" scope="row">
+                                            {{forloop.counter|add:start_number}}
+                                        </th>
+                                        <td class="bg-light text-dark text-center">
+                                            {{item.created_at.day}}-{{item.created_at.month}}-{{item.created_at.year}}
 
-                                <tr class="fs-6 bg-info-subtle">
-                                    <th class="bg-info-subtle text-dark text-center fw-semi" scope="row">
-                                        3
-                                    </th>
-                                    <td class="bg-info-subtle text-dark text-center">
-                                        #21234
-                                    </td>
-                                    <td class="bg-info-subtle text-dark text-center">
-                                        200,000 đ
-                                    </td>
-                                </tr>
-                            
-                                <tr class="fs-6 bg-light">
-                                    <th class="bg-light text-dark text-center fw-semi" scope="row">
-                                        4
-                                    </th>
-                                    <td class="bg-light text-dark text-center">
-                                        #234569
-                                    </td>
-                                    <td class="bg-light text-dark text-center">
-                                        250,000 đ
-                                    </td>
-                                </tr>
-
-                                <tr class="fs-6 bg-info-subtle">
-                                    <th class="bg-info-subtle text-dark text-center fw-semi" scope="row">
-                                        5
-                                    </th>
-                                    <td class="bg-info-subtle text-dark text-center">
-                                        #216234
-                                    </td>
-                                    <td class="bg-info-subtle text-dark text-center">
-                                        200,000 đ
-                                    </td>
-                                </tr>
-                            
-                                <tr class="fs-6 bg-light">
-                                    <th class="bg-light text-dark text-center fw-semi" scope="row">
-                                        6
-                                    </th>
-                                    <td class="bg-light text-dark text-center">
-                                        #2374569
-                                    </td>
-                                    <td class="bg-light text-dark text-center">
-                                        250,000 đ
-                                    </td>
-                                </tr>
-
-                                <tr class="fs-6 bg-info-subtle">
-                                    <th class="bg-info-subtle text-dark text-center fw-semi" scope="row">
-                                        7
-                                    </th>
-                                    <td class="bg-info-subtle text-dark text-center">
-                                        #216274
-                                    </td>
-                                    <td class="bg-info-subtle text-dark text-center">
-                                        200,000 đ
-                                    </td>
-                                </tr>
-                            
-                                <tr class="fs-6 bg-light">
-                                    <th class="bg-light text-dark text-center fw-semi" scope="row">
-                                        8
-                                    </th>
-                                    <td class="bg-light text-dark text-center">
-                                        #237769
-                                    </td>
-                                    <td class="bg-light text-dark text-center">
-                                        250,000 đ
-                                    </td>
-                                </tr>
+                                            <!-- {{item.created_at.hour}}:{{item.created_at.minute}}:{{item.created_at.second}} -->
+                                        </td>
+                                        <td class="bg-light text-dark text-center">
+                                            {{item.status}}
+                                        </td>
+                                        <td class="bg-light text-dark text-center">
+                                            {{item.price|intcomma}} đ
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                {% endwith %}
+                                
                             
                     </tbody>
                 </table>
 
+                
+
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                      <li class="page-item disabled">
-                        <a class="page-link">Previous</a>
-                      </li>
-                      <li class="page-item"><a class="page-link active" href="#">1</a></li>
-                      <li class="page-item"><a class="page-link" href="#">2</a></li>
-                      <li class="page-item"><a class="page-link" href="#">3</a></li>
-                      <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                      </li>
+                    <ul class="pagination justify-content-center" style="margin-bottom: 0.5rem;">
+                        {% if items.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ items.previous_page_number }}">Previous</a></li>
+                        {% endif %}
+        
+                        {% for num in page_range %}
+                            <li class="page-item {% if num == items.number %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                        {% endfor %}
+                
+                        {% if items.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ items.next_page_number }}">Next</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ items.paginator.num_pages }}">Last &raquo;</a></li>
+                        {% endif %}
                     </ul>
                 </nav>
             </div>
@@ -248,26 +192,41 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    const ctx = document.getElementById('reportChart');
+    fetch('/restaurant-admin/7-day-statistic/')
+    .then(response => response.json())
+    .then(data => {
+        // console.log(data.bundle.revenues);
+        // console.log(data.bundle.days);
 
-    let reportChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["08/04/2024", "09/04/2024", "10/04/2024", "11/04/2024", "12/04/2024", "13/04/2024", "14/04/2024"],
-            datasets: [{
-                label: 'Số lượng đơn hàng 7 ngày gần nhất',
-                data: [53, 35, 67, 45, 53, 45, 53],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                beginAtZero: true
+        let revenues = [];
+        let days = []
+        if (data.success) {
+            revenues = data.bundle.revenues;
+            days = data.bundle.days;
+        }
+
+        const ctx = document.getElementById('reportChart');
+
+        let reportChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: days,
+                datasets: [{
+                    label: 'Doanh thu 7 ngày gần nhất',
+                    data: revenues,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                    beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
+    })
+    .catch(error => console.error('Fetch error:', error));
 </script>
 
 {% endblock script %}

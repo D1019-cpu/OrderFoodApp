@@ -8,6 +8,7 @@ from .views.review import *
 from .views.cart import * 
 from .views.dish import *
 from .views.profile import * 
+from .views.order import * 
 
 # For User
 urlpatterns = [
@@ -33,10 +34,24 @@ urlpatterns += [
     # GET
     path('restaurant-admin/', get_restaurant_admin_view, name='restaurant-admin-view'),
     path('restaurant-admin/dish/', get_dish_admin_view, name='dish-admin-view'),
+    path('restaurant-admin/add-dish/', get_add_dish_admin_view, name='add-dish-admin-view'),
+    path('restaurant-admin/edit-dish/<pk>/', get_edit_dish_admin_view, name='edit-dish-admin-view'),
     path('restaurant-admin/order/', get_order_admin_view, name='order-admin-view'),
     path('restaurant-admin/review/', get_review_admin_view, name='review-admin-view'),
     path('restaurant-admin/report/', get_report_admin_view, name='report-admin-view'),
     path('restaurant-admin/revenues/', get_revenues_admin_view, name='revenues-admin-view'),
+    path('restaurant-admin/profile/<slug:slug>/',get_edit_profile_restaurant_view, name='restaurant-profile-admin-view'),
+
+    # POST
+    path('restaurant-admin/profile/save/<slug:slug>/', post_save_profile_restaurant_admin_view, name='save-restaurant-admin-profile-view'),
+    path('restaurant-admin/add-dish/save/', post_add_dish_admin_view, name='post-add-dish-admin-view'),
+    path('restaurant-admin/delete/dish/<pk>/', post_delete_dish_admin_view, name='post-delete-dish-admin-view'),
+    path('restaurant-admin/edit-dish/save/<pk>/', post_edit_dish_admin_view, name='post-edit-dish-admin-view'),
+    path('restaurant-admin/update-order/<pk>/', post_update_order_admin_view, name='post-update-order-admin-view'),
+
+    # API
+    path('restaurant-admin/7-day-statistic/', get_7_day_statistic_api, name='7-day-statistic-api'),
+    path('restaurant-admin/order/<pk>/', get_detail_order_admin_api, name='detail-order-admin-api'),
     
 
 ]
@@ -45,4 +60,5 @@ urlpatterns += [
     # API
     # GET
     path('dishes/<pk>/', get_dish_data_api, name='get-dish-data-api'),
+
 ]

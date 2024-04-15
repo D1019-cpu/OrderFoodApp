@@ -7,7 +7,7 @@ class Toping(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='toping/', null=True, blank=True)
     price = models.IntegerField(default=0)
-    dish = models.ForeignKey(Dish, on_delete=models.DO_NOTHING, null=True, blank=True)
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = "Toping"
