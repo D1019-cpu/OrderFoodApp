@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %} Quản lý nhà hàng {% endblock title %}
+{% block title %} Đánh giá món ăn {% endblock title %}
 
 {% block content %}
 
@@ -65,7 +65,7 @@
                     {{request.user.username}}
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% url 'get-profile-view' %}">Tài khoản</a></li>
+                    <li><a class="dropdown-item" href="{% url 'restaurant-profile-admin-view' restaurant.slug %}">Nhà hàng</a></li>
                     <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
                     <li><a class="dropdown-item" href="#">Ví</a></li>
                     <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>
@@ -76,6 +76,17 @@
             </li>
         </div>
         <hr style="width: 100%;margin: 1rem auto 0;" />
+
+        {% if messages %}
+
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert-{{ message.tags }} alert alert-dismissible mt-1 mb-1"{% endif %} role="alert">
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    
+        {% endif %}
 
         <div class="w-100 p-3">
             
@@ -136,23 +147,11 @@
                     <table class="table table-hover shadow">
                         <thead>
                             <tr>
-                                
-                                    <th class="bg-primary text-white text-center fw-semi" style="border-top-left-radius: 6px;" scope="col">
-                                        STT
+                                {% for title in titles %}
+                                    <th class="bg-primary text-white text-center fw-semi" {% if forloop.first %}style="border-top-left-radius: 6px;"{% endif %} {% if forloop.last %}style="border-top-right-radius: 6px;"{% endif %} scope="col">
+                                        {{title}}
                                     </th>
-                                    <th class="bg-primary text-white text-center fw-semi" scope="col">
-                                        Tên tài khoản
-                                    </th>
-                                    <th class="bg-primary text-white text-center fw-semi" scope="col">
-                                        Đánh giá
-                                    </th>
-                                    <th class="bg-primary text-white text-center fw-semi" scope="col">
-                                        Loại đánh giá
-                                    </th>
-                                    <th class="bg-primary text-white text-center fw-semi" scope="col">
-                                        Trạng thái
-                                    </th>
-                                    
+                                {% endfor %}
                                 
                             </tr>
                         </thead>

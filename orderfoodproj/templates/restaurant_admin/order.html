@@ -96,7 +96,7 @@
                     {{request.user.username}}
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% url 'get-profile-view' %}">Tài khoản</a></li>
+                    <li><a class="dropdown-item" href="{% url 'restaurant-profile-admin-view' request.user.provider.restaurant.slug %}">Nhà hàng</a></li>
                     <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
                     <li><a class="dropdown-item" href="#">Ví</a></li>
                     <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>

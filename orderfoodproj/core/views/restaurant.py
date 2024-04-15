@@ -6,7 +6,8 @@ from core.models.restaurant import Restaurant
 from core.models.dish import Dish 
 from core.models.menu import Menu 
 from core.models.order import OrderDish 
-from core.models.city import City 
+from core.models.city import City  
+from core.models.review import Review 
 
 from django.utils import timezone 
 from datetime import datetime, timedelta
@@ -258,18 +259,71 @@ def get_order_admin_view(request):
 # GET: /restaurant-admin/review/
 @login_required(login_url='/login/')
 def get_review_admin_view(request):
-    return render(request, 'restaurant_admin/review.html', {})
+    if request.user.user_type == '2':
+        if request.user.provider.restaurant.is_active:
+            restaurant = request.user.provider.restaurant
+            dishes = Dish.get_dishes_by_restaurant(restaurant)
+
+            titles = ["STT", "Tên tài khoản", "Đánh giá", "Món ăn", "Trạng thái"]
+
+            items_per_page = 6
+            p = Paginator(dishes, items_per_page)
+            page = request.GET.get('page')
+            items = p.get_page(page)
+            current = items.number
+            start = max(current - 2, 1)
+            end = min(current + 2, items.paginator.num_pages)
+            page_range = range(start, end)
+            start_number = (current - 1) * items_per_page
+
+            return render(request, 'restaurant_admin/review.html', {
+                'titles': titles,
+                'items': items, 
+                'start': start, 
+                'end': end, 
+                'page_range': page_range,
+                'start_number': start_number,
+                'restaurant': restaurant
+            }, status=200)
+        else:
+            return HttpResponse("<h1>Sau khi được duyệt nhà hàng có thể truy cập vào trang quản lý</h1><h3>Quá trình chờ duyệt trong 24h</h3>")
+    else:
+        return render(request, 'handle_error/403.html')
 
 
 # GET: /restaurant-admin/report/
 @login_required(login_url='/login/')
 def get_report_admin_view(request):
+    if request.user.user_type == '2':
+        if request.user.provider.restaurant.is_active:
+            restaurant = request.user.provider.restaurant
+            cities = City.objects.all().order_by('name')
+            return render(request, 'restaurant_admin/profile.html', {
+                'restaurant': restaurant,
+                'cities': cities
+            }, status=200)
+        else:
+            return HttpResponse("<h1>Sau khi được duyệt nhà hàng có thể truy cập vào trang quản lý</h1><h3>Quá trình chờ duyệt trong 24h</h3>")
+    else:
+        return render(request, 'handle_error/403.html')
     return render(request, 'restaurant_admin/report.html', {})
 
 
 # GET: /restaurant-admin/revenues/
 @login_required(login_url='/login/')
 def get_revenues_admin_view(request):
+    if request.user.user_type == '2':
+        if request.user.provider.restaurant.is_active:
+            restaurant = request.user.provider.restaurant
+            cities = City.objects.all().order_by('name')
+            return render(request, 'restaurant_admin/profile.html', {
+                'restaurant': restaurant,
+                'cities': cities
+            }, status=200)
+        else:
+            return HttpResponse("<h1>Sau khi được duyệt nhà hàng có thể truy cập vào trang quản lý</h1><h3>Quá trình chờ duyệt trong 24h</h3>")
+    else:
+        return render(request, 'handle_error/403.html')
     return render(request, 'restaurant_admin/revenues.html', {})
 
 

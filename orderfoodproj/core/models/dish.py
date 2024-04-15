@@ -28,12 +28,16 @@ class Dish(models.Model):
     featured = models.BooleanField(default=False)
     distance = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     
-    creted_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True)
 
     @staticmethod
     def get_all_dishes():
         return Dish.objects.all()
+
+    @staticmethod
+    def get_dishes_by_restaurant(restaurant):
+        return Dish.objects.filter(restaurant=restaurant).order_by('-created_at')
 
     class Meta:
         verbose_name = "Dish"
