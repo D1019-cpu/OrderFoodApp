@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load custom_filters %}
+
 {% block title %} Đánh giá món ăn {% endblock title %}
 
 {% block content %}
@@ -91,7 +93,7 @@
         <div class="w-100 p-3">
             
             <form action="">
-                <div class="row bg-info-subtle pt-2 fs-6 rounded-top">
+                <div class="row bg-info-subtle p-2 fs-6 rounded-top rounded-bottom">
                     <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
                         <input type="text" name="q" class="form-control" id="input-search-device" placeholder="Nhập đánh giá" required>
                     </div>
@@ -124,7 +126,7 @@
                 </div>
             </form>
 
-            <div class="row bg-info-subtle p-2 fs-6 rounded-bottom">
+            <!-- <div class="row bg-info-subtle p-2 fs-6 rounded-bottom">
                 <div class="col-2">
                     <select type="text" class="form-select form-select-sm" id="select-record-number">
                         <option value="1">50 bản ghi</option>
@@ -140,9 +142,9 @@
                         <span class='ms-1 fs-6'>Tải xuống</span>
                     </a>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="row bg-info-subtle rounded p-2 mt-2 fs-6" style="height: 70vh;">
+            <div class="row bg-info-subtle rounded p-2 mt-2 fs-6" style="height: 75vh;">
                 <div class="col-12">
                     <table class="table table-hover shadow">
                         <thead>
@@ -156,19 +158,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
+                            {% with start_number=start_number %}
+                            {% for item in items %}
+                                {% if forloop.counter|divisibleby:2 %}
                                     <tr class="fs-6 bg-info-subtle">
                                         <th class="bg-info-subtle text-dark text-center fw-semi" scope="row">
-                                            1
+                                            {{forloop.counter|add:start_number}}
                                         </th>
                                         <td class="bg-info-subtle text-dark text-center">
-                                            user1
+                                            {{item.user.admin.username}}
+                                        </td>
+                                        <td class="bg-info-subtle text-dark text-left">
+                                            {{ item.rating|stars }}
                                         </td>
                                         <td class="bg-info-subtle text-dark text-center">
-                                            ⭐⭐⭐
-                                        </td>
-                                        <td class="bg-info-subtle text-dark text-center">
-                                            Nhà hàng
+                                            {{item.dish.name|truncatechars:25}}
                                         </td>    
                                         <td class="bg-info-subtle text-dark text-center">
 
@@ -176,19 +180,19 @@
                                             
                                         </td>
                                     </tr>
-                                
+                                {% else %}
                                     <tr class="fs-6 bg-light">
                                         <th class="bg-light text-dark text-center fw-semi" scope="row">
-                                            2
+                                            {{forloop.counter|add:start_number}}
                                         </th>
                                         <td class="bg-light text-dark text-center">
-                                            user2
+                                            {{item.user.admin.username}}
+                                        </td>
+                                        <td class="bg-light text-dark text-left">
+                                            {{ item.rating|stars }}
                                         </td>
                                         <td class="bg-light text-dark text-center">
-                                            ⭐⭐⭐⭐⭐
-                                        </td>
-                                        <td class="bg-light text-dark text-center">
-                                            Món ăn
+                                            {{item.dish.name|truncatechars:25}}
                                         </td>
                                         <td class="bg-light text-dark text-center">
                                             
@@ -196,120 +200,32 @@
 
                                         </td>
                                     </tr>
-                                
-                                    <!-- <tr class="fs-6 bg-light">
-                                        <th class="bg-light text-dark text-center fw-semi" scope="row">
-                                            2
-                                        </th>
-                                        <td class="bg-light text-dark text-center">
-                                            Trà Dâu Tây 700ML
-                                        </td>
-                                        <td class="bg-light text-dark text-center">
-                                            Đồ uống
-                                        </td>
-                                        <td class="bg-light text-dark text-center">
-                                            <img src="" alt="">
-                                        </td>
-                                        <td class="bg-light text-dark text-center">
-                                            26,000 đ
-                                        </td>
-                                        
-                                        <td class="bg-light text-dark text-center">
-                                            
-                                            <a class="btn btn-warning" href=""><i class="fa-regular fa-pen-to-square"></i></a>
-                                            
-                                            <button class="btn btn-dark modal-button" data-command="trash" data-comfirm="{{item.SoDangKy}}" data-pk="{{item.ID}}">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="fs-6 bg-info-subtle">
-                                        <th class="bg-info-subtle text-dark text-center fw-semi" scope="row">
-                                            1
-                                        </th>
-                                        <td class="bg-info-subtle text-dark text-center">
-                                            Trà Chanh Mật Ong
-                                        </td>
-                                        <td class="bg-info-subtle text-dark text-center">
-                                            Đồ uống
-                                        </td>
-                                        <td class="bg-info-subtle text-dark text-center">
-                                            <img src="" alt="">
-                                        </td>
-                                        <td class="bg-info-subtle text-dark text-center">
-                                            22,000 đ
-                                        </td>
-                                        
-                                        <td class="bg-info-subtle text-dark text-center">
-                                            <a class="btn btn-warning" href=""><i class="fa-regular fa-pen-to-square"></i></a>
-                                            
-                                            <button class="btn btn-dark modal-button" data-command="trash" data-comfirm="{{item.SoDangKy}}" data-pk="{{item.ID}}">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                
-                                    <tr class="fs-6 bg-light">
-                                        <th class="bg-light text-dark text-center fw-semi" scope="row">
-                                            2
-                                        </th>
-                                        <td class="bg-light text-dark text-center">
-                                            Trà Dâu Tây 700ML
-                                        </td>
-                                        <td class="bg-light text-dark text-center">
-                                            Đồ uống
-                                        </td>
-                                        <td class="bg-light text-dark text-center">
-                                            <img src="" alt="">
-                                        </td>
-                                        <td class="bg-light text-dark text-center">
-                                            26,000 đ
-                                        </td>
-                                        
-                                        <td class="bg-light text-dark text-center">
-                                            
-                                            <a class="btn btn-warning" href=""><i class="fa-regular fa-pen-to-square"></i></a>
-                                            
-                                            <button class="btn btn-dark modal-button" data-command="trash" data-comfirm="{{item.SoDangKy}}" data-pk="{{item.ID}}">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr> -->
+                                {% endif %}
+                            {% endfor %}
+                            {% endwith %}
+                                  
                         </tbody>
                     </table>
 
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                          <li class="page-item disabled">
-                            <a class="page-link">Previous</a>
-                          </li>
-                          <li class="page-item"><a class="page-link active" href="#">1</a></li>
-                          <li class="page-item"><a class="page-link" href="#">2</a></li>
-                          <li class="page-item"><a class="page-link" href="#">3</a></li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                          </li>
-                        </ul>
-                    </nav>
                     
-                    <!-- <nav aria-label="Page navigation example">
+                    
+                    <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center" style="margin-bottom: 0.5rem;">
-                            {% if ships.has_previous %}
+                            {% if items.has_previous %}
                                 <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
-                                <li class="page-item"><a class="page-link" href="?page={{ ships.previous_page_number }}">Previous</a></li>
+                                <li class="page-item"><a class="page-link" href="?page={{ items.previous_page_number }}">Previous</a></li>
                             {% endif %}
             
                             {% for num in page_range %}
-                                <li class="page-item {% if num == ships.number %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                <li class="page-item {% if num == items.number %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
                             {% endfor %}
                     
-                            {% if ships.has_next %}
-                                <li class="page-item"><a class="page-link" href="?page={{ ships.next_page_number }}">Next</a></li>
-                                <li class="page-item"><a class="page-link" href="?page={{ ships.paginator.num_pages }}">Last &raquo;</a></li>
+                            {% if items.has_next %}
+                                <li class="page-item"><a class="page-link" href="?page={{ items.next_page_number }}">Next</a></li>
+                                <li class="page-item"><a class="page-link" href="?page={{ items.paginator.num_pages }}">Last &raquo;</a></li>
                             {% endif %}
                         </ul>
-                    </nav> -->
+                    </nav>
                     
                 </div>
             </div>

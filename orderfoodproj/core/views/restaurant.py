@@ -263,11 +263,12 @@ def get_review_admin_view(request):
         if request.user.provider.restaurant.is_active:
             restaurant = request.user.provider.restaurant
             dishes = Dish.get_dishes_by_restaurant(restaurant)
+            reviews = Review.objects.filter(dish__in=dishes)
 
             titles = ["STT", "Tên tài khoản", "Đánh giá", "Món ăn", "Trạng thái"]
 
-            items_per_page = 6
-            p = Paginator(dishes, items_per_page)
+            items_per_page = 8
+            p = Paginator(reviews, items_per_page)
             page = request.GET.get('page')
             items = p.get_page(page)
             current = items.number
