@@ -59,13 +59,13 @@
     </div>
     <div style="width: 80%;min-height: 100vh;" class="p-2">
         <div class="d-flex align-items-center justify-content-between" style="margin-top: 1rem;">
-            <p class="fs-5 mb-0">Quản lý nhà hàng</p>
+            <p class="fs-5 mb-0">Doanh thu</p>
             <li class="nav-item dropdown" style="margin-left: 24px;padding-right: 48px;list-style: none;">
                 <a class="nav-link dropdown-toggle" style="min-width: 100px; text-align: right;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {{request.user.username}}
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% url 'get-profile-view' %}">Tài khoản</a></li>
+                    <li><a class="dropdown-item" href="{% url 'restaurant-profile-admin-view' restaurant.slug %}">Nhà hàng</a></li>
                     <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
                     <li><a class="dropdown-item" href="#">Ví</a></li>
                     <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>
@@ -76,6 +76,12 @@
             </li>
         </div>
         <hr style="width: 100%;margin: 1rem auto 0;" />
+        Tổng số đơn hàng
+        Tổng doanh thu 
+        Phí duy trì 1% 
+        Thuế 10% 
+        Doanh thu sau thuế
+        Rút tiền
         
     </div>
 </div>

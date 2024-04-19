@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %} Trạng thái đơn hàng {% endblock title %}
+
+{% block style %}
+
+<link rel="stylesheet" href="{% static 'assets/css/index.css' %}">
+
+{% endblock style %}
+
+{% block content %}
+
+<div class="container-fluid pt-5" style="background-color: #D9F2EE;min-height: 100vh;">
+
+    <!-- Nav -->
+    <nav id="navbar" class="navbar navbar-expand-lg pt-2">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse d-sm-none" style="padding-left: 48px;" id="navbarSupportedContent">
+            <li class="nav-item" style="list-style: none;">
+                <a class="nav-link cart d-flex align-items-center justify-content-center" href="{% url 'index' %}"><ion-icon name="home-outline"></ion-icon></a>
+            </li>
+          </div>
+
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <span class="cart-counter">{{request.session.cart.keys|length}}</span>
+              <a id="cart" class="nav-link cart" href="{% url 'cart-detail-view' %}"><ion-icon name="cart-outline"></ion-icon></a>
+            </li>
+            
+            {% if request.user.is_authenticated %}
+            <li class="nav-item dropdown" style="margin-left: 24px;padding-right: 48px;">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{request.user.username}}
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'order-detail-view' %}">Đơn hàng</a></li>
+                <li><a class="dropdown-item" href="#">Ví</a></li>
+                <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Cài đặt</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout-view' %}">Đăng xuất</a></li>
+              </ul>
+            </li>
+            {% else %}
+            <li class="nav-item" style="padding-right: 48px;">
+                <a class="nav-link user" href="{% url 'get-login-view' %}"><ion-icon name="person-outline"></ion-icon></a>
+            </li>
+            {% endif %}
+
+          </ul>
+        </div>
+    </nav>
+
+    {% if messages %}
+
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert-{{ message.tags }} alert alert-dismissible mt-1 mb-1"{% endif %} role="alert">
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    
+    {% endif %}
+
+    <div style="margin: 1rem 3em 0;gap: 1%;" class="d-flex">
+        <div class="left pt-2" style="width: 100%;">
+            
+            <h3 class="fs-2 fw-semibold">Danh sách đơn đặt hàng</h3>
+            
+            <div class="w-100 cart-item">
+                <div class="row mt-1 p-2">
+                    <div class="col col-2">
+                        <strong>Món ăn</strong>
+                    </div>
+                    <div class="col col-2 d-flex align-items-center">
+                        <strong>Tên món ăn</strong>
+                    </div>
+                    <div class="col col-1 d-flex align-items-center">
+                        <strong>Số lượng</strong>
+                    </div>
+                    <div class="col col-1 d-flex align-items-center">
+                        <strong>Giá</strong>
+                    </div>
+                    <div class="col col-3">
+                        <strong>Ghi chú</strong>
+                    </div>
+                    <div class="col col-2">
+                        <strong>Trạng thái</strong>
+                    </div>
+                    <div class="col col-1 d-flex align-items-center">
+                        <strong>Hủy</strong>
+                    </div>
+                </div>
+                <hr class="divider" style="margin: 1rem 0 1rem;width: 100%;" />
+                {% for item in orders %}
+                <div class="row mt-1 p-2">
+                    <div class="col col-2">
+                        <img src="{{item.dish.image.url}}" style="width: 150px;height: 150px;border-radius: 6px;object-fit: cover;object-position: center;" alt="wine">
+                    </div>
+                    <div class="col col-2 d-flex align-items-center">
+                        <p>{{item.dish.name}}</p>
+                    </div>
+                    <div class="col col-1 d-flex align-items-center">
+                        <input type="number" min="1" value="{{item.quantity}}" max="100" step="1" class="form-control item-quantity" disabled>
+                    </div>
+                    <div class="col col-1 d-flex align-items-center">
+                        <p class="item-price">{{item.price|intcomma}} đ</p>
+                    </div>
+                    <div class="col col-3">
+                            <label for="" class="form-label">Ghi chú</label>
+                            <textarea style="resize: none;" class="form-control cart-item-note" id="" rows="3">{{item.note}}</textarea>
+                    </div>
+                    <div class="col col-2 d-flex align-items-center">
+                        <p>{{item.status}}</p>
+                    </div>
+                    {% if item.status == 'Đang chờ xử lý' %}
+                    <a href="{% url 'cancel-order-view' item.pk %}" class="col col-1 d-flex align-items-center text-danger">
+                        
+                        <i class="fa-solid fa-trash fs-5"></i>
+                        
+                    </a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            
+
+            
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let navbar = document.getElementById('navbar');
+        let scrollPosition = window.scrollY;
+
+        function onScroll() {
+            let currentPosition = window.scrollY;
+            if (currentPosition > scrollPosition) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            scrollPosition = currentPosition;
+        }
+
+        window.addEventListener('scroll', onScroll);
+    });
+</script>
+
+
+
+
+
+
+{% endblock content %}

@@ -20,6 +20,8 @@ class Order(models.Model):
     id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='id')
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING, null=True, blank=True)
     total_price = models.IntegerField(default=0)
+    delivery_address = models.TextField(null=True, blank=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True) 
 
     @staticmethod 
     def get_order_by_user(user):
@@ -40,15 +42,12 @@ class OrderDish(models.Model):
     
     order = models.ForeignKey(Order, on_delete=models.DO_NOTHING, null=True, blank=True)
     
-    delivery_address = models.TextField()
-    phone_number = models.CharField(max_length=20) # tham khảo các app đặt đồ nó lấy luôn số điện thoại của người dùng hay cho nhập
-    
     dish = models.ForeignKey(Dish, on_delete=models.DO_NOTHING, null=True, blank=True)
     price = models.IntegerField(default=0)
     quantity = models.IntegerField(default=1)
     note = models.TextField(null=True, blank=True)
 
-    created_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     @staticmethod
     def get_order_dish_by_order(order):

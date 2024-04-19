@@ -4,7 +4,7 @@ View menu, dish, nhà hàng, thêm món ăn vào cart (CRUD),
 Sau khi đặt và nhận thì có thể đánh giá review về nhà hàng, món ăn (CRUD)
 Tìm kiếm món ăn, nhà hàng 
 Chỉnh sửa profile 
-Có thể in bills (PDF), xem lại lịch sử 
+Có thể in bills (PDF), xem lại lịch sử  (Tạm thời bỏ)
 
 Đối với nhà hàng:
 đăng ký xác thực nhiều form (multi-form) và admin sẽ quản lý (duyệt nhà hàng)

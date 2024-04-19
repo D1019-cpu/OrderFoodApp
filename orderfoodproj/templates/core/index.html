@@ -51,7 +51,7 @@
 
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <span class="cart-counter">4</span>
+              <span id="cart-counter" class="cart-counter">{{request.session.cart.keys|length}}</span>
               <a id="cart" class="nav-link cart" href="{% url 'cart-detail-view' %}"><ion-icon name="cart-outline"></ion-icon></a>
             </li>
             
@@ -62,7 +62,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{% url 'get-profile-view' %}">Tài khoản</a></li>
-                <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
+                <li><a class="dropdown-item" href="{% url 'order-detail-view' %}">Đơn hàng</a></li>
                 <li><a class="dropdown-item" href="#">Ví</a></li>
                 <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>
                 <li><hr class="dropdown-divider"></li>
@@ -156,7 +156,12 @@
                     <span>{{dish.distance}} km</span>
                   </p>
                   <p class="card-text">Giá: {{dish.price|intcomma}} đ</p>
+                  {% if dish.id|stringformat:"s" in request.session.cart %}
+                  <a href="{% url 'cart-detail-view' %}" class="btn btn-success">Đặt món</a>
+                  {% else %}
                   <button class="btn btn-success dish-modal" data-pk="{{dish.id}}" style="border-radius: 50%;">+</button>
+                  <a href="{% url 'cart-detail-view' %}" class="btn btn-success btn-order d-none">Đặt món</a>
+                  {% endif %}
                 </div>
             </div>
             {% endfor %}

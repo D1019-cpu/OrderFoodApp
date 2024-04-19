@@ -26,7 +26,7 @@
                         </label>
                     </div>
                     <div style="width: 60%;">
-                        <input type="text" class="form-control" style="border-radius: 0;" value="admin">
+                        <input type="text" class="form-control" style="border-radius: 0;" value="{{request.user.username}}">
                         <div id="emailHelp" class="form-text">Tên tài khoản chỉ được thay đổi 1 lần</div>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                         </label>
                     </div>
                     <div style="width: 60%;">
-                        <input type="text" class="form-control" style="border-radius: 0;" value="Nguyễn Văn Long">
+                        <input type="text" class="form-control" style="border-radius: 0;" value="{{customer.fullname}}">
                     </div>
                 </div>
 
@@ -49,7 +49,7 @@
                         </label>
                     </div>
                     <div style="width: 60%;">
-                        <input type="text" class="form-control" style="border-radius: 0;" value="test@gmail.com">
+                        <input type="text" class="form-control" style="border-radius: 0;" value="{{request.user.email}}">
                     </div>
                 </div>
 
@@ -60,7 +60,7 @@
                         </label>
                     </div>
                     <div style="width: 60%;">
-                        <input type="text" class="form-control" style="border-radius: 0;" value="0239234566">
+                        <input type="text" class="form-control" style="border-radius: 0;" value="{{customer.phone_number}}">
                     </div>
                 </div>
 
@@ -71,7 +71,7 @@
                         </label>
                     </div>
                     <div style="width: 60%;">
-                        <input type="text" class="form-control" style="border-radius: 0;" value="Hoàng Quốc Việt, Cầu Giấy, Hà Nội">
+                        <input type="text" class="form-control" style="border-radius: 0;" value="{{customer.address}}">
                     </div>
                 </div>
 
@@ -82,7 +82,7 @@
                         </label>
                     </div>
                     <div style="width: 60%;">
-                        <input type="date" class="form-control" style="border-radius: 0;">
+                        <input type="date" value="{{customer.dob}}" class="form-control" style="border-radius: 0;">
                     </div>
                 </div>
 

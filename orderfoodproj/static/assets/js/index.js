@@ -41,7 +41,7 @@ modalBtns.forEach(modalBtn => modalBtn.addEventListener('click', () => {
                 <h5 class="card-title">${dish.name}</h5>
                 <p class="card-text">${dish.price} đ</p>
                 <div>
-                    <input type="number" class="form-control" min="1" max="100" step="1" />
+                    <input id="dish-quantity" type="number" class="form-control" value="1" min="1" max="100" step="1" />
                 </div>
             </div>
         </div>
@@ -65,7 +65,49 @@ modalBtns.forEach(modalBtn => modalBtn.addEventListener('click', () => {
             </label>
         </div>
         `; // price ở trên có thể fix lấy từ button với data attribute
-        submitModalBtn.innerHTML = `Thêm +${dish.price} đ`
+        submitModalBtn.innerHTML = `Thêm +${dish.price} đ`;
+
+        document.getElementById('dish-quantity').addEventListener('change', () => {
+            const quantity = document.getElementById('dish-quantity').value;
+            submitModalBtn.innerHTML = `Thêm + ${parseFloat(dish.price)*parseFloat(quantity)}`;
+        });
+
+        submitModalBtn.addEventListener('click', () => {
+            const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+            const quantity = document.getElementById('dish-quantity').value; 
+            const note = document.getElementById('exampleFormControlTextarea1').value;
+            // console.log(dish.url);
+            fetch('/cart/add-to-cart/', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify({
+                    'dish_id': dataPk,
+                    'name': dish.name,
+                    'quantity': quantity,
+                    'note': note,
+                    'price': parseInt(dish.price),
+                    'total_price': parseFloat(dish.price)*parseInt(quantity),
+                    'image_url': dish.url,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    document.getElementById('cart-counter').innerHTML = `${data.total_dishes}`;
+                    let FoodItem = modalBtn.closest('.food-item');
+                    let orderBtn = FoodItem.querySelector('.btn-order');
+                    orderBtn.classList.remove('d-none');
+                    modalBtn.classList.add('d-none');
+                    overlayElem.style.display = 'none';
+                    modalElem.classList.remove('show-modal');
+                }
+            })
+            .catch(error => console.error(error));
+        });
     })
     .catch(error => console.error(error));
 

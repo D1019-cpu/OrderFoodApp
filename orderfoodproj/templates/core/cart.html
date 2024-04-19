@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% block title %} Đặt đồ ăn {% endblock title %}
 
 {% block style %}
@@ -10,6 +11,8 @@
 
 {% block content %}
 
+{% csrf_token %}
+
 <div class="container-fluid pt-5" style="background-color: #D9F2EE;min-height: 100vh;">
 
     <!-- Nav -->
@@ -19,15 +22,14 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse d-sm-none" style="padding-left: 48px;" id="navbarSupportedContent">
-              <form class="search" method="GET" action="{% url 'index' %}">
-                <input type="text" placeholder="Bạn muốn ăn gì?" name="q" value="{% if query != 'None' %}{{query}}{% else %}''{% endif %}">
-                <button class="search-btn">Tìm kiếm</button>
-              </form>
+            <li class="nav-item" style="list-style: none;">
+                <a class="nav-link cart d-flex align-items-center justify-content-center" href="{% url 'index' %}"><ion-icon name="home-outline"></ion-icon></a>
+            </li>
           </div>
 
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <span class="cart-counter">3</span>
+              <span class="cart-counter">{{request.session.cart.keys|length}}</span>
               <a id="cart" class="nav-link cart" href="{% url 'cart-detail-view' %}"><ion-icon name="cart-outline"></ion-icon></a>
             </li>
             
@@ -37,7 +39,7 @@
                 {{request.user.username}}
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
+                <li><a class="dropdown-item" href="{% url 'order-detail-view' %}">Đơn hàng</a></li>
                 <li><a class="dropdown-item" href="#">Ví</a></li>
                 <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>
                 <li><hr class="dropdown-divider"></li>
@@ -69,91 +71,45 @@
         <div class="left pt-2" style="width: 74%;">
             
             <h3 class="fs-2 fw-semibold">Danh sách món ăn</h3>
-            <div class="w-100">
+            {% for key, item in request.session.cart.items %}
+            <div class="w-100 cart-item">
                 <hr class="divider" style="margin: 1rem 0 1rem;width: 100%;" />
                 <div class="row mt-1 p-2">
                     <div class="col col-2">
-                        <img src="{% static 'assets/images/wine.jpg' %}" style="width: 150px;height: 150px;border-radius: 6px;object-fit: cover;object-position: center;" alt="wine">
+                        <img src="{{item.image_url}}" style="width: 150px;height: 150px;border-radius: 6px;object-fit: cover;object-position: center;" alt="wine">
                     </div>
                     <div class="col col-2 d-flex align-items-center">
-                        <p>Trà Ổi Hồng 700ML</p>
+                        <p>{{item.name}}</p>
                     </div>
-                    <div class="col col-1 d-flex align-items-center"">
-                        <input type="number" min="1" value="1" max="100" step="1" class="form-control">
+                    <div class="col col-1 d-flex align-items-center">
+                        <input data-price="{{item.price}}" type="number" min="1" value="{{item.quantity}}" max="100" step="1" class="form-control item-quantity">
                     </div>
-                    <div class="col col-2 d-flex align-items-center"">
-                        <p>100,000 đ</p>
-                    </div>
-                    <div class="col col-4">
-                            <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
-                            <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                    </div>
-                    <div class="col col-1 d-flex align-items-center"">
-                        <i class="fa-solid fa-trash fs-5"></i>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="w-100">
-                <hr class="divider" style="margin: 1rem 0 1rem;width: 100%;" />
-                <div class="row mt-1 p-2">
-                    <div class="col col-2">
-                        <img src="{% static 'assets/images/seafood.jpg' %}" style="width: 150px;height: 150px;border-radius: 6px;object-fit: cover;object-position: center;" alt="wine">
-                    </div>
-                    <div class="col col-2 d-flex align-items-center">
-                        <p>Ốc Hương Trang</p>
-                    </div>
-                    <div class="col col-1 d-flex align-items-center"">
-                        <input type="number" min="1" value="1" max="100" step="1" class="form-control">
-                    </div>
-                    <div class="col col-2 d-flex align-items-center"">
-                        <p>100,000 đ</p>
+                    <div class="col col-2 d-flex align-items-center justify-content-center" style="gap: 0 1rem;">
+                        <p class="item-price">{{item.total_price|intcomma}} đ</p>
+                        <button data-image-url="{{item.image_url}}" data-price="{{item.price}}" data-pk="{{key}}" data-dish-name="{{item.name}}" data-quantity="{{item.quantity}}" data-note="{{item.note}}" class="update-cart btn btn-success rounded-circle d-flex align-items-center justify-content-center" style="width: 30px;height: 30px;"><i class="fa-solid fa-rotate"></i></button>
                     </div>
                     <div class="col col-4">
-                            <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
-                            <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <label for="" class="form-label">Ghi chú</label>
+                            <textarea style="resize: none;" class="form-control cart-item-note" id="" rows="3">{{item.note}}</textarea>
                     </div>
-                    <div class="col col-1 d-flex align-items-center"">
+                    <a href="{% url 'cart-remove-dish-api' key %}" class="col col-1 d-flex align-items-center text-danger">
                         <i class="fa-solid fa-trash fs-5"></i>
-                    </div>
+                    </a>
                 </div>
-
             </div>
+            {% endfor %}
 
-            <div class="w-100">
-                <hr class="divider" style="margin: 1rem 0 1rem;width: 100%;" />
-                <div class="row mt-1 p-2">
-                    <div class="col col-2">
-                        <img src="{% static 'assets/images/steak.jpg' %}" style="width: 150px;height: 150px;border-radius: 6px;object-fit: cover;object-position: center;" alt="wine">
-                    </div>
-                    <div class="col col-2 d-flex align-items-center">
-                        <p>Big Beef Burger</p>
-                    </div>
-                    <div class="col col-1 d-flex align-items-center"">
-                        <input type="number" min="1" value="1" max="100" step="1" class="form-control">
-                    </div>
-                    <div class="col col-2 d-flex align-items-center"">
-                        <p>100,000 đ</p>
-                    </div>
-                    <div class="col col-4">
-                            <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
-                            <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                    </div>
-                    <div class="col col-1 d-flex align-items-center"">
-                        <i class="fa-solid fa-trash fs-5"></i>
-                    </div>
-                </div>
-
-            </div>
+            
         </div>
         <div class="right pt-2" style="width: 25%;background-color: #DDDDDD;border-radius: 6px;">
+            <form action="{% url 'checkout-view' %}" method="POST">
+                {% csrf_token %}
             <h3 class="fs-2 fw-semibold" style="padding: 0 5%;">Bills</h3>
             <hr class="divider" style="margin: 1rem auto 1rem;width: 90%;" />
             <div style="width: 90%;">
                 <p class="d-flex align-items-center justify-content-between" style="padding: 0 5%;">
-                    <b>Số lượng: 3</b> 
-                    <strong>300,000 đ</strong>
+                    <b>Số lượng: {{request.session.cart.keys|length}}</b> 
+                    <strong>{{total_price|intcomma}} đ</strong>
                 </p>
                 <div style="padding: 0 5%;">
                     <h4 class="fs-5">Shipping</h4>
@@ -162,19 +118,27 @@
                     </select>
                 </div>
                 <div style="padding: 0 5%;" class="pt-3">
+                    <h4 class="fs-5">Số điện thoại</h4>
+                    <input name="phone-number" type="number" class="form-control" required>
+                </div>
+                <div style="padding: 0 5%;" class="pt-3">
+                    <label for="exampleFormControlTextarea1" class="form-label fs-5">Địa chỉ</label>
+                    <textarea name="delivery-address" class="form-control" id="exampleFormControlTextarea1" rows="3" style="resize: none;" required></textarea>
+                </div>
+                <div style="padding: 0 5%;" class="pt-3">
                     <h4 class="fs-5">Mã khuyến mãi</h4>
                     <input type="text" class="form-control">
                 </div>
                 <div style="padding: 0 5%;" class="pt-3">
                     <h4 class="fs-5">Phương thức thanh toán</h4>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
                         <label class="form-check-label" for="flexRadioDefault1">
                           Thanh toán khi nhận hàng
                         </label>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
                         <label class="form-check-label" for="flexRadioDefault2">
                           Paypal
                         </label>
@@ -185,10 +149,11 @@
             <div style="padding: 0 5%;">
                 <p class="d-flex align-items-center justify-content-between">
                     <b>Tổng tiền</b>
-                    <strong>300,000 đ</strong>
+                    <strong>{{total_price|intcomma}} đ</strong>
                 </p>
-                <button class="btn btn-dark w-100" style="border-radius: 0;">Đặt hàng</button>
+                <button type="submit" class="btn btn-dark w-100 mb-3" style="border-radius: 0;">Đặt hàng</button>
             </div>
+            </form>
         </div>
     </div>
 
@@ -212,6 +177,58 @@
 
         window.addEventListener('scroll', onScroll);
     });
+</script>
+
+<script>
+    let quantityInputs = [...document.querySelectorAll('.item-quantity')];
+    quantityInputs.forEach(input => input.addEventListener('change', () => {
+        let quantity = parseInt(input.value);
+        let dataPrice = input.getAttribute('data-price');
+        let cartItem = input.closest('.cart-item');
+        cartItem.querySelector('.update-cart').setAttribute('data-quantity', quantity);
+        cartItem.querySelector('.update-cart').setAttribute('data-note', cartItem.querySelector('.cart-item-note').value);
+        cartItem.querySelector('.item-price').innerHTML = `${parseFloat(dataPrice)*quantity} đ`;
+    }));
+</script>
+
+<script>
+    let updateCartBtns = [...document.querySelectorAll('.update-cart')];
+    updateCartBtns.forEach(btn => btn.addEventListener('click', () => {
+        let csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        let dataPk = btn.getAttribute('data-pk');
+        let name = btn.getAttribute('data-dish-name');
+        let quantity = btn.getAttribute('data-quantity');
+        let note = btn.closest('.cart-item').querySelector('.cart-item-note').value;
+        let price = btn.getAttribute('data-price');
+        let image_url = btn.getAttribute('data-image-url');
+
+        // console.log(dish.url);
+        fetch('/cart/add-to-cart/', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify({
+                    'dish_id': dataPk,
+                    'name': name,
+                    'quantity': quantity,
+                    'note': note,
+                    'price': parseInt(price),
+                    'total_price': parseFloat(price)*parseInt(quantity),
+                    'image_url': image_url,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                }
+            })
+            .catch(error => console.error(error));
+        
+
+    }));
 </script>
 
 {% endblock content %}

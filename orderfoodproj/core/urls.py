@@ -21,12 +21,15 @@ urlpatterns = [
     path('menu/<slug:slug>/', get_menu_detail_view, name='menu-detail-view'),
     path('restaurant/<slug:slug>/', get_restaurant_view, name='restaurant-detail-view'),
     path('cart/detail/', cart_detail_view, name='cart-detail-view'),
+    path('order/detail/', order_detail_view, name='order-detail-view'),
     path('profile/', get_profile_view, name='get-profile-view'),
 
     # POST
     path('do-login/', post_login_view, name='post-login-view'),
     path('do-register/', post_register_view, name='post-register-view'),
     path('do-register-provider/', post_register_provider_view, name='post-register-provider-view'),
+    path('checkout-order/', checkout_view, name='checkout-view'),
+    path('order/cancel-order/<pk>/', cancel_order_view, name='cancel-order-view'),
 ]
 
 # For Restaurant Admin
@@ -60,5 +63,11 @@ urlpatterns += [
     # API
     # GET
     path('dishes/<pk>/', get_dish_data_api, name='get-dish-data-api'),
+    path('cart/clear-cart/', clear_cart_api, name='clear-cart-api'),
+    path('cart/view-cart/', view_cart_api, name='view-cart-api'),
+
+    # POST
+    path('cart/add-to-cart/', add_to_cart_api, name='add-to-cart-api'),
+    path('cart/delete-to-cart/<dish_id>/', cart_remove_dish_api, name='cart-remove-dish-api'),
 
 ]

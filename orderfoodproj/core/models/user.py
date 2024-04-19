@@ -8,6 +8,12 @@ from .restaurant import Restaurant
 from .city import City
 
 
+GENDERS = (
+    ("Nam", "Nam"),
+    ("Nữ", "Nữ")
+)
+
+
 class CustomUser(AbstractUser):
     user_type_data = (
         (1, "customer"),
@@ -23,6 +29,9 @@ class Customer(models.Model):
     id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='id')
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     
+    fullname = models.CharField(max_length=255, null=True, blank=True)
+    dob = models.DateField(null=True, blank=True) # date of birth 
+    gender = models.CharField(default="Nam", choices=GENDERS, max_length=7)
     address = models.TextField(null=True, blank=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     avatar = models.ImageField(upload_to='uploads/user_avatar/', default='default/user.png')

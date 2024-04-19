@@ -298,16 +298,15 @@ def get_report_admin_view(request):
     if request.user.user_type == '2':
         if request.user.provider.restaurant.is_active:
             restaurant = request.user.provider.restaurant
-            cities = City.objects.all().order_by('name')
-            return render(request, 'restaurant_admin/profile.html', {
+            
+            return render(request, 'restaurant_admin/report.html', {
                 'restaurant': restaurant,
-                'cities': cities
+                
             }, status=200)
         else:
             return HttpResponse("<h1>Sau khi được duyệt nhà hàng có thể truy cập vào trang quản lý</h1><h3>Quá trình chờ duyệt trong 24h</h3>")
     else:
         return render(request, 'handle_error/403.html')
-    return render(request, 'restaurant_admin/report.html', {})
 
 
 # GET: /restaurant-admin/revenues/
@@ -316,16 +315,15 @@ def get_revenues_admin_view(request):
     if request.user.user_type == '2':
         if request.user.provider.restaurant.is_active:
             restaurant = request.user.provider.restaurant
-            cities = City.objects.all().order_by('name')
-            return render(request, 'restaurant_admin/profile.html', {
+            
+            return render(request, 'restaurant_admin/revenues.html', {
                 'restaurant': restaurant,
-                'cities': cities
+                
             }, status=200)
         else:
             return HttpResponse("<h1>Sau khi được duyệt nhà hàng có thể truy cập vào trang quản lý</h1><h3>Quá trình chờ duyệt trong 24h</h3>")
     else:
         return render(request, 'handle_error/403.html')
-    return render(request, 'restaurant_admin/revenues.html', {})
 
 
 
